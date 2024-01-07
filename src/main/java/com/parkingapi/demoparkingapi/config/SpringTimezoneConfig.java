@@ -8,6 +8,6 @@ import java.util.TimeZone;
 public class SpringTimezoneConfig {
   public void SpringTimezoneConfig() {
 
-    TimeZone.setDefault(null);
+    TimeZone.setDefault(TimeZone.getTimeZone("America/Fortaleza"));
   }
 }

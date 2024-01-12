@@ -1,4 +1,7 @@
 package com.parkingapi.demoparkingapi.service;
+import com.parkingapi.demoparkingapi.exception.EntityNotFoundException;
+import com.parkingapi.demoparkingapi.exception.PasswordInvalidException;
+import com.parkingapi.demoparkingapi.exception.UserNameUniqueViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.parkingapi.demoparkingapi.entity.Usuario;
@@ -14,24 +17,28 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UserNameUniqueViolationException(String.format("Usuário {%s}, já existe", usuario.getUsername()));
+        }
     }
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não encontrado")
+                () -> new EntityNotFoundException(String.format("Usuário id={%s} não encontrado", id))
         );
     }
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confimaSenha) {
         if (!novaSenha.equals(confimaSenha)) {
-            throw new RuntimeException("Nova senha e confirma senha não são iguais");
+            throw new PasswordInvalidException("Nova senha e confirma senha não são iguais");
         }
        Usuario user = buscarPorId(id);
 
         if (!user.getPassword().equals(senhaAtual)) {
-           throw new RuntimeException("Senha atual não confere");
+           throw new PasswordInvalidException("Senha atual não confere");
        }
 
        user.setPassword(novaSenha);

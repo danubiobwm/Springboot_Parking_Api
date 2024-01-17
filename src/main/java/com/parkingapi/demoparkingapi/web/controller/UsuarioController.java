@@ -4,7 +4,7 @@ package com.parkingapi.demoparkingapi.web.controller;
 import com.parkingapi.demoparkingapi.entity.Usuario;
 import com.parkingapi.demoparkingapi.service.UsuarioService;
 import com.parkingapi.demoparkingapi.web.dto.UsuarioCreateDto;
-import com.parkingapi.demoparkingapi.web.dto.UsuarioResposeDto;
+import com.parkingapi.demoparkingapi.web.dto.UsuarioResponseDto;
 import com.parkingapi.demoparkingapi.web.dto.UsuarioSenhaDto;
 import com.parkingapi.demoparkingapi.web.dto.mapper.UsuarioMapper;
 import com.parkingapi.demoparkingapi.web.exception.ErrorMessage;
@@ -37,7 +37,7 @@ public class UsuarioController {
                             responseCode = "201",
                             description = "Usuário criado com sucesso",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UsuarioResposeDto.class))),
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
                     @ApiResponse(responseCode = "409",
                             description = "Já existe um usuário com o email informado",
                             content = @Content(mediaType = "application/json",
@@ -48,7 +48,7 @@ public class UsuarioController {
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PostMapping
-    public ResponseEntity<UsuarioResposeDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
+    public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
@@ -60,7 +60,7 @@ public class UsuarioController {
                             responseCode = "201",
                             description = "Recurso recuperado com  sucesso",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UsuarioResposeDto.class))),
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
 
                     @ApiResponse(responseCode = "404",
                             description = "Recursos não encontrado",
@@ -68,7 +68,7 @@ public class UsuarioController {
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResposeDto> getById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
         Usuario user = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toDto(user));
     }
@@ -103,7 +103,7 @@ public class UsuarioController {
                             responseCode = "200",
                             description = "Recursos recuperados com sucesso",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UsuarioResposeDto.class))),
+                                    schema = @Schema(implementation = UsuarioResponseDto.class))),
 
                     @ApiResponse(responseCode = "404",
                             description = "Recursos não encontrado",
@@ -111,7 +111,7 @@ public class UsuarioController {
                                     schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping
-    public ResponseEntity<List<UsuarioResposeDto>> getAll() {
+    public ResponseEntity<List<UsuarioResponseDto>> getAll() {
         List<Usuario> users = usuarioService.buscarTodos();
         return ResponseEntity.ok(UsuarioMapper.toListDto(users));
     }

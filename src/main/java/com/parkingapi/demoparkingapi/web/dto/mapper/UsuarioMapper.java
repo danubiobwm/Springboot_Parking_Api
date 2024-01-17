@@ -2,7 +2,7 @@ package com.parkingapi.demoparkingapi.web.dto.mapper;
 
 import com.parkingapi.demoparkingapi.entity.Usuario;
 import com.parkingapi.demoparkingapi.web.dto.UsuarioCreateDto;
-import com.parkingapi.demoparkingapi.web.dto.UsuarioResposeDto;
+import com.parkingapi.demoparkingapi.web.dto.UsuarioResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
@@ -14,9 +14,9 @@ public class UsuarioMapper {
         return new ModelMapper().map(createDto, Usuario.class);
     }
 
-    public static UsuarioResposeDto toDto(Usuario usuario) {
+    public static UsuarioResponseDto toDto(Usuario usuario) {
         String role = usuario.getRole().name().substring("ROLE_".length());
-        PropertyMap<Usuario, UsuarioResposeDto> props = new PropertyMap<Usuario, UsuarioResposeDto>() {
+        PropertyMap<Usuario, UsuarioResponseDto> props = new PropertyMap<Usuario, UsuarioResponseDto>() {
             @Override
             protected void configure() {
                 map().setRole(role);
@@ -24,10 +24,10 @@ public class UsuarioMapper {
         };
         ModelMapper mapper = new ModelMapper();
         mapper.addMappings(props);
-        return mapper.map(usuario, UsuarioResposeDto.class);
+        return mapper.map(usuario, UsuarioResponseDto.class);
     }
 
-    public static List<UsuarioResposeDto> toListDto(List<Usuario> usuarios) {
+    public static List<UsuarioResponseDto> toListDto(List<Usuario> usuarios) {
         return usuarios.stream().map(user -> toDto(user)).collect(Collectors.toList());
     }
 }

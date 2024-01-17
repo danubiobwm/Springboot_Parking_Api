@@ -105,7 +105,7 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UsuarioResponseDto.class))),
 
-                    @ApiResponse(responseCode = "404",
+                    @ApiResponse(responseCode = "422",
                             description = "Recursos não encontrado",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))

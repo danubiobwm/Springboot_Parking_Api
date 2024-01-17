@@ -7,8 +7,7 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
 public class UsuarioCreateDto {
 
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", message = "O formanto email é invalido")
-    @NotBlank(message = "O campo email é obrigatório")
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", message = "O formato do email é inválido")
     private String username;
 
     @Size(min = 6, max = 8, message = "A senha deve conter entre 6 e 8 caracteres")

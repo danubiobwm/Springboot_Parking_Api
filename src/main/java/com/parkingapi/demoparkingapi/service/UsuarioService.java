@@ -2,6 +2,7 @@ package com.parkingapi.demoparkingapi.service;
 import com.parkingapi.demoparkingapi.exception.EntityNotFoundException;
 import com.parkingapi.demoparkingapi.exception.PasswordInvalidException;
 import com.parkingapi.demoparkingapi.exception.UserNameUniqueViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.parkingapi.demoparkingapi.entity.Usuario;
@@ -15,9 +16,12 @@ import java.util.List;
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+
+    private final PasswordEncoder passwordEncoder;
     @Transactional
     public Usuario salvar(Usuario usuario) {
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.save(usuario);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             throw new UserNameUniqueViolationException(String.format("Usuário {%s}, já existe", usuario.getUsername()));
@@ -37,11 +41,11 @@ public class UsuarioService {
         }
        Usuario user = buscarPorId(id);
 
-        if (!user.getPassword().equals(senhaAtual)) {
+        if (!passwordEncoder.matches(senhaAtual, user.getPassword())) {
            throw new PasswordInvalidException("Senha atual não confere");
        }
 
-       user.setPassword(novaSenha);
+       user.setPassword(passwordEncoder.encode(novaSenha));
        return user;
     }
 

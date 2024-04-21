@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class VagaCreateDto {
-    @NotBlank
+    @NotBlank(message = "{NotBlank.vagaCreateDto.codigo}")
     @Size(min = 4, max = 4)
     private String codigo;
     @NotBlank
